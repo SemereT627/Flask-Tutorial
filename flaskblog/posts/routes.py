@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import (Blueprint, render_template, url_for, flash,
                    redirect, request, abort)
 from flask_login import login_required, current_user
@@ -19,7 +20,7 @@ def new_post():
         db.session.commit()
         flash('Your post has been created!', 'success')
 
-        return redirect(url_for('home'))
+        return redirect(url_for('main.home'))
     return render_template('create_post.html', title='New Post', form=form, legend='New Post')
 
 
@@ -39,9 +40,10 @@ def update_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
+        post.date_posted=datetime.utcnow()
         db.session.commit()
         flash('Your post has been updated', 'success')
-        return redirect(url_for('post', post_id=post_id))
+        return redirect(url_for('posts.post', post_id=post_id))
 
     elif request.method == 'GET':
         form.title.data = post.title
@@ -58,4 +60,4 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
