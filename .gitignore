@@ -2,3 +2,4 @@
 /flaskblog/__pycache__/
 env
 /flaskblog/site.db
+/config.py
